@@ -1,0 +1,291 @@
+drop database negozio;
+
+create database negozio;
+
+use negozio;
+
+create table marche
+(
+   id_marca int AUTO_INCREMENT,
+   nome varchar(30) not null,
+   primary key (id_marca)
+) ENGINE=MyISAM;
+
+create table categorie
+(
+   id_categoria int AUTO_INCREMENT,
+   nome varchar(30) not null,
+   primary key (id_categoria)
+) ENGINE=MyISAM;
+
+create table tipi_prodotto
+(
+   id_tipo int AUTO_INCREMENT,
+   nome varchar(30) not null,
+   primary key (id_tipo),
+   fk_categoria int,
+   foreign key (fk_categoria) references categorie(id_categoria)
+) ENGINE=MyISAM;
+
+
+create table prodotti
+(
+   id_prodotto int AUTO_INCREMENT,
+   nome varchar(60) not null,
+   descrizione varchar(256),
+   prezzo double not null,
+   FULLTEXT (nome),
+   primary key (id_prodotto),
+   fk_marca int,
+   foreign key (fk_marca) references marche(id_marca),
+   fk_tipo int,
+   foreign key (fk_tipo) references tipi_prodotto(id_tipo)
+) ENGINE=MyISAM;
+
+
+create table utenti
+(
+    codice_fiscale char(16),
+    nome varchar(30) not null,
+    cognome varchar(30) not null,
+    data_nascita date,
+    indirizzo varchar(100),
+    citta varchar(50),
+    CAP varchar(10),
+    email varchar(40) not null,
+    password varchar(40) not null,
+    numero_telefono varchar(15),
+    tipo enum('amministratore','operatore','cliente') not null,
+    primary key(codice_fiscale)
+) ENGINE=MyISAM;
+
+create table ordini
+(
+   id_ordine int AUTO_INCREMENT,
+   data_ordine date,
+   indirizzo varchar(100),
+   citta varchar(50),
+   CAP varchar(10),
+   importo_totale double not null,
+   fk_codice_fiscale char(16),
+   foreign key (fk_codice_fiscale) references utenti(codice_fiscale),
+   primary key (id_ordine)
+) ENGINE=MyISAM;
+
+create table contenere
+(
+   fk_prodotto int,
+   foreign key (fk_prodotto) references prodotti(id_prodotto),
+   fk_ordine int,
+   foreign key (fk_ordine) references ordini(id_ordine),
+   primary key (fk_prodotto, fk_ordine)
+) ENGINE=MyISAM;
+
+
+create user 'operatore'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT ON negozio.* TO 'operatore'@'localhost';
+GRANT INSERT, UPDATE ON negozio.prodotti TO 'operatore'@'localhost';
+GRANT INSERT, UPDATE ON negozio.tipi_prodotto TO 'operatore'@'localhost';
+GRANT INSERT, UPDATE ON negozio.marche TO 'operatore'@'localhost';
+GRANT INSERT, UPDATE ON negozio.categorie TO 'operatore'@'localhost';
+
+
+
+use negozio;
+
+insert into categorie (nome) values
+("strumento");
+
+insert into categorie (nome) values
+("accessorio");
+
+insert into categorie (nome) values
+("effetto");
+
+insert into categorie (nome) values
+("amplificatore");
+
+insert into categorie (nome) values
+("didattica");
+
+insert into categorie (nome) values
+("audiodj");
+
+insert into categorie (nome) values
+("cassa");
+
+insert into marche (nome) values
+("fender");
+
+insert into marche (nome) values
+("yamaha");
+
+insert into marche (nome) values
+("warwick");
+
+insert into marche (nome) values
+("ibanez");
+
+insert into marche (nome) values
+("markbass");
+
+insert into marche (nome) values
+("ampeg");
+
+insert into marche (nome) values
+("marshall");
+
+insert into marche (nome) values
+("hartke");
+
+insert into marche (nome) values
+("esp");
+
+insert into marche (nome) values
+("mayones");
+
+insert into marche (nome) values
+("d addario");
+
+insert into marche (nome) values
+("ernie bool");
+
+insert into marche (nome) values
+("boss");
+
+insert into marche (nome) values
+("dunlop");
+
+
+use negozio;
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("chitarra", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("basso", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("pianoforte", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("batteria", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("metodi per studio", 5);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("archi", 5);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("contrabbasso", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("violino", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("violoncello", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("sassofono", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("flauto", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("tromba", 1);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("metronomo", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("accordatore", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("corde", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("plettro", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("piedistallo", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("custodia", 2);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("testata", 4);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("cassa", 4);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("combo", 4);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("pedaliera", 3);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("pedale", 3);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("rack", 3);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("Console DJ", 6);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("Mixer per DJ", 6);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("Schede audio per DJ", 6);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("Casse attive", 7);
+
+insert into tipi_prodotto (nome, fk_categoria) values
+("Casse passive", 7);
+
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("fender jazz bass pastorius signature", "images/basso-elettrico-4-corde-fender-jazz-bass-highway.jpg", 1300.531, 1, 2);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("squier jazz bass affinity series", "images/Squier_JazzBass_Affinity_Blk.jpg", 230, 1, 2);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("squier precision bass affinity series", "images/SQUIER_PRECISION_494ed48fb784d.jpg", 225, 1, 2);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("BC RICH DRACO LIMITED EDIT.GHOST FLAME", "images/aDVGFW.001.jpg", 1025.00, 3, 1);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("BC RICH KERRY KING TRIBALI WARLOCK", "images/aMMWTF.001.jpg", 398.00, 3, 1);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("Markbass Mini CMD 121P", "images/55122_l.jpg", 750.00, 5, 21);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("Markbass Combo 121 Lite", "images/DV019_Jpg_Regular_H76814_front.jpg", 1109.00, 5, 21);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("Markbass Mini CMD 151P Jeff Berlin signature", "images/foto_75ss.jpg", 1250.00, 5, 21);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("SVT - 2PRO BASS HEAD", "images/SVT-2PRO_LG.jpg", 500.00, 6, 19);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("Boss Metronome", "images/wl8378_1278049209_1278048887_db30-large.jpg", 30.00, 13, 13);
+
+insert into prodotti (nome, descrizione, prezzo, fk_marca, fk_tipo) values
+("Boss SD - 1", "images/BOSS_SD1.jpg", 80.00, 13, 23);
+
+
+insert into utenti (codice_fiscale, nome, cognome, data_nascita, indirizzo, citta, CAP, email, password, numero_telefono, tipo) values
+("STRSHR93L05H501W", "Sephiroth", "Strife", "1993-07-05", "via settore 5", "Midgar City", "00103", "marco-z@hotmail.it", "password", "3494132347", "amministratore");
+
+insert into utenti (codice_fiscale, nome, cognome, data_nascita, indirizzo, citta, CAP, email, password, numero_telefono, tipo) values
+("CIAOCIAOCIAOCIAO", "Mark", "Daymler", "1984-07-09", "via non saprei 44", "Roma", "00151", "seph93@hotmail.it", "trollface", "064114530", "cliente");
+
+insert into utenti (codice_fiscale, nome, cognome, data_nascita, indirizzo, citta, CAP, email, password, numero_telefono, tipo) values
+("HIHIHIHIHIHIHIHI", "Agares", "LoL", "1998-01-21", "summoner's rift 55", "Fantasia", "00592", "ciao@hotmail.it", "trollface", "23112312", "operatore");
